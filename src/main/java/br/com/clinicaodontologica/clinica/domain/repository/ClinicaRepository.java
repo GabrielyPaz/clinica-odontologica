@@ -10,5 +10,6 @@ import java.util.UUID;
 @Repository
 public interface ClinicaRepository extends JpaRepository<Clinica, UUID> {
     boolean existsByCnpj(String cnpj);
+    boolean existsByCnpjAndIdIsNot(String cnpj, UUID id);
 
 }

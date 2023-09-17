@@ -30,8 +30,20 @@ public class ClinicaServiceImpl implements ClinicaService {
     }
 
     @Override
-    public Clinica atualizarClinica(Clinica clinica){
-        return this.clinicaRepository.save(clinica);
+    public Clinica atualizarClinica(UUID id, Clinica clinica){
+        Clinica clinicaAtual = this.clinicaRepository.findById(id).orElseThrow();
+        boolean existeClinica = this.clinicaRepository.existsByCnpjAndIdIsNot(clinica.getCnpj(), id);
+        if (existeClinica){
+            throw new CnpjAlreadyExistsException(clinica.getCnpj());
+        }
+        clinicaAtual.setNome(clinica.getNome());
+        clinicaAtual.setCnpj(clinica.getCnpj());
+        clinicaAtual.setRazaoSocial(clinica.getRazaoSocial());
+        clinicaAtual.setDescricao(clinica.getDescricao());
+        clinicaAtual.setEndereco(clinica.getEndereco());
+        clinicaAtual.setContato(clinica.getContato());
+
+        return this.clinicaRepository.save(clinicaAtual);
     }
 
     @Override
