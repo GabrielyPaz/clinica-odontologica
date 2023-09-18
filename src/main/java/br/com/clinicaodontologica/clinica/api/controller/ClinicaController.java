@@ -2,6 +2,8 @@ package br.com.clinicaodontologica.clinica.api.controller;
 
 import br.com.clinicaodontologica.clinica.api.dto.request.ClinicaRequest;
 import br.com.clinicaodontologica.clinica.api.dto.response.ClinicaResponse;
+import br.com.clinicaodontologica.clinica.api.dto.response.listResponse.ClinicaListResponse;
+import br.com.clinicaodontologica.clinica.api.dto.response.wrapperResponse.ClinicaWrapperResponse;
 import br.com.clinicaodontologica.clinica.domain.entity.Clinica;
 import br.com.clinicaodontologica.clinica.domain.service.ClinicaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,7 +44,20 @@ public class ClinicaController {
         return ResponseEntity.ok (response);
     }
 
+@GetMapping
+ResponseEntity<ClinicaWrapperResponse> buscarClinicasPorNome(@RequestParam String nome){
+    List<Clinica>clinicas = clinicaService.buscarClinicas(nome);
+    ClinicaWrapperResponse clinicaWrapperResponse = new ClinicaWrapperResponse();
+    clinicaWrapperResponse.setClinicas(clinicas.stream().map(clinica -> {
+        ClinicaListResponse clinicaListResponse = new ClinicaListResponse();
+        clinicaListResponse.setId(clinica.getId());
+        clinicaListResponse.setNome(clinica.getNome());
+        clinicaListResponse.setCnpj(clinica.getCnpj());
+        return clinicaListResponse;
+    }).toList());
 
+    return ResponseEntity.ok(clinicaWrapperResponse);
+}
 
 
 
