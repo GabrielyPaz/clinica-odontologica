@@ -29,40 +29,53 @@ public class ClinicaController {
     }
 
     @PostMapping
-    ResponseEntity<?> criarClinica (@RequestBody @Valid ClinicaRequest request){
-        Clinica clinica = objectMapper.convertValue(request,Clinica.class);
+    ResponseEntity<?> criarClinica(@RequestBody @Valid ClinicaRequest request) {
+        Clinica clinica = objectMapper.convertValue(request, Clinica.class);
         Clinica clinicaCriada = clinicaService.criarClinica(clinica);
-        ClinicaResponse response = objectMapper.convertValue(clinicaCriada,ClinicaResponse.class);
+        ClinicaResponse response = objectMapper.convertValue(clinicaCriada, ClinicaResponse.class);
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping ("{id}")
-    ResponseEntity<?> atualizarClinica (@PathVariable UUID id, @RequestBody @Valid ClinicaRequest request){
-        Clinica clinica = objectMapper.convertValue(request,Clinica.class);
+    @PutMapping("{id}")
+    ResponseEntity<?> atualizarClinica(@PathVariable UUID id, @RequestBody @Valid ClinicaRequest request) {
+        Clinica clinica = objectMapper.convertValue(request, Clinica.class);
         Clinica clinicaAtualizada = clinicaService.atualizarClinica(id, clinica);
-        ClinicaResponse response = objectMapper.convertValue(clinicaAtualizada,ClinicaResponse.class);
-        return ResponseEntity.ok (response);
+        ClinicaResponse response = objectMapper.convertValue(clinicaAtualizada, ClinicaResponse.class);
+        return ResponseEntity.ok(response);
     }
 
-@GetMapping
-ResponseEntity<ClinicaWrapperResponse> buscarClinicasPorNome(@RequestParam String nome){
-    List<Clinica>clinicas = clinicaService.buscarClinicas(nome);
-    ClinicaWrapperResponse clinicaWrapperResponse = new ClinicaWrapperResponse();
-    clinicaWrapperResponse.setClinicas(clinicas.stream().map(clinica -> {
-        ClinicaListResponse clinicaListResponse = new ClinicaListResponse();
-        clinicaListResponse.setId(clinica.getId());
-        clinicaListResponse.setNome(clinica.getNome());
-        clinicaListResponse.setCnpj(clinica.getCnpj());
-        return clinicaListResponse;
-    }).toList());
+    @GetMapping
+    ResponseEntity<ClinicaWrapperResponse> buscarClinicasPorNome(@RequestParam(required = false) String nome) {
+        List<Clinica> clinicas = clinicaService.buscarClinicas(nome);
+        ClinicaWrapperResponse clinicaWrapperResponse = new ClinicaWrapperResponse();
+        clinicaWrapperResponse.setClinicas(clinicas.stream().map(clinica -> {
+            ClinicaListResponse clinicaListResponse = new ClinicaListResponse();
+            clinicaListResponse.setId(clinica.getId());
+            clinicaListResponse.setNome(clinica.getNome());
+            clinicaListResponse.setCnpj(clinica.getCnpj());
+            return clinicaListResponse;
+        }).toList());
 
-    return ResponseEntity.ok(clinicaWrapperResponse);
-}
+        return ResponseEntity.ok(clinicaWrapperResponse);
+    }
+
+    @GetMapping("{id}")
+    ResponseEntity<ClinicaResponse>buscarPorId(@PathVariable UUID id) {
+    Clinica clinica = clinicaService.buscarClinicaPorId(id);
+    ClinicaResponse response = clinicaResponseByClinica(clinica);
+    return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("{id}")
+    ResponseEntity<Void>deletarClinica(@PathVariable UUID id){
+        clinicaService.deletarClinica(id);
+        return ResponseEntity.ok().build();
+    }
 
 
+    private ClinicaResponse clinicaResponseByClinica(Clinica clinica) {
+        return objectMapper.convertValue(clinica, ClinicaResponse.class );
 
-
-
-
+    }
 
 }
