@@ -1,5 +1,7 @@
-package br.com.clinicaodontologica.clinica.api.dto.request;
+package br.com.clinicaodontologica.clinica.api.dto.response;
 
+import br.com.clinicaodontologica.clinica.api.dto.request.ContatoRequest;
+import br.com.clinicaodontologica.clinica.api.dto.request.EnderecoRequest;
 import br.com.clinicaodontologica.clinica.domain.entity.Consulta;
 import br.com.clinicaodontologica.clinica.domain.entity.Contato;
 import br.com.clinicaodontologica.clinica.domain.entity.Endereco;
@@ -13,28 +15,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
 
-public class PacienteRequest {
+public class PacienteResponse {
 
-    @NotBlank
+    private UUID id;
     private String nome;
-    @NotNull
     private LocalDate dataNascimento;
-    @Valid
-    @NotNull
-    private EnderecoRequest endereco;
-    @NotNull
-    @JsonAlias(value = "sexo")
+    private Endereco endereco;
+    private LocalDateTime criadoEm;
+    private LocalDateTime atualizadoEm;
     private GeneroEnum genero;
-    @Valid
-    @NotNull
-    private ContatoRequest contato;
-
-
+    private ContatoResponse contato;
+    private Set<Consulta> consultas;
 
 }

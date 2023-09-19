@@ -1,6 +1,7 @@
 package br.com.clinicaodontologica.clinica.domain.service.impl;
 
 import br.com.clinicaodontologica.clinica.domain.entity.Clinica;
+import br.com.clinicaodontologica.clinica.domain.exception.ClinicaNotFoundException;
 import br.com.clinicaodontologica.clinica.domain.exception.CnpjAlreadyExistsException;
 import br.com.clinicaodontologica.clinica.domain.repository.ClinicaRepository;
 import br.com.clinicaodontologica.clinica.domain.service.ClinicaService;
@@ -55,11 +56,13 @@ public class ClinicaServiceImpl implements ClinicaService {
     public Clinica buscarClinicaPorId(UUID id) {
         return this.clinicaRepository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new ClinicaNotFoundException(id));
     }
 
     @Override
     public  void deletarClinica (UUID id){
-        clinicaRepository.deleteById(id);
+        Clinica clinica = clinicaRepository
+                .findById(id).orElseThrow(() -> new ClinicaNotFoundException(id));
+        clinicaRepository.delete(clinica);
     }
 }

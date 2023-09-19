@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public class Paciente {
     @Column(name="id")
     private UUID id;
     private String nome;
-    private LocalDateTime dataNascimento;
+    private LocalDate dataNascimento;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco",
             referencedColumnName = "id",
@@ -36,9 +37,9 @@ public class Paciente {
             referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "fk_paciente_contato"))
     private Contato contato;
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "id_paciente")
-//    private Set<Consulta> consultas;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_paciente")
+    private Set<Consulta> consultas;
 
     @PrePersist
     public void naCriacao(){

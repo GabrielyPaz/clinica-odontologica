@@ -16,6 +16,6 @@ public class ContatoRequest {
     @Email
     private String email;
     @Pattern(regexp = "\\((\\d{2})\\) (\\d{4,5})-(\\d{4})")
-    //regex validando campos do telefone de acordo com solicitado
+
     private String telefone;
 }
