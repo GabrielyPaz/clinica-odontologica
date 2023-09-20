@@ -72,10 +72,9 @@ public class ClinicaController {
         return ResponseEntity.ok().build();
     }
 
-
     private ClinicaResponse clinicaResponseByClinica(Clinica clinica) {
-        return objectMapper.convertValue(clinica, ClinicaResponse.class );
-
+        return objectMapper.convertValue(clinica, ClinicaResponse.class);
     }
+
 
 }
