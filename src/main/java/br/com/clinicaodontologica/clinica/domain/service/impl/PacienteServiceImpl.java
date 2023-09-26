@@ -29,7 +29,7 @@ public class PacienteServiceImpl implements PacienteService {
 
     @Override
     public Paciente atualizarPaciente(UUID id, Paciente paciente) {
-        Paciente pacienteAtual = this.pacienteRepository.findById(id).orElseThrow();
+        Paciente pacienteAtual = this.pacienteRepository.findById(id).orElseThrow(() -> new PacienteNotFoundException(id));
         pacienteAtual.setNome(paciente.getNome());
         pacienteAtual.setDataNascimento(paciente.getDataNascimento());
         pacienteAtual.setGenero(paciente.getGenero());
@@ -41,7 +41,10 @@ public class PacienteServiceImpl implements PacienteService {
 
     @Override
     public List<Paciente> buscarPaciente(String nome) {
-        return this.pacienteRepository.findAll();
+        if (nome== null){
+            return this.pacienteRepository.findAll();
+        }
+        return this.pacienteRepository.findByNomeStartingWith(nome);
     }
 
     @Override

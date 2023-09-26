@@ -68,7 +68,7 @@ public class PacienteController {
     @DeleteMapping("{id}")
     ResponseEntity<Void>deleteClinica (@PathVariable UUID id){
         pacienteService.deletarPaciente(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     private PacienteResponse pacienteResponseByPaciente (Paciente paciente){

@@ -32,7 +32,7 @@ public class ClinicaServiceImpl implements ClinicaService {
 
     @Override
     public Clinica atualizarClinica(UUID id, Clinica clinica){
-        Clinica clinicaAtual = this.clinicaRepository.findById(id).orElseThrow();
+        Clinica clinicaAtual = this.clinicaRepository.findById(id).orElseThrow(() -> new ClinicaNotFoundException(id));
         boolean existeClinica = this.clinicaRepository.existsByCnpjAndIdIsNot(clinica.getCnpj(), id);
         if (existeClinica){
             throw new CnpjAlreadyExistsException(clinica.getCnpj());
@@ -49,7 +49,10 @@ public class ClinicaServiceImpl implements ClinicaService {
 
     @Override
     public List<Clinica> buscarClinicas(String nome) {
-        return this.clinicaRepository.findAll();
+        if (nome == null){
+            return this.clinicaRepository.findAll();
+        }
+        return this.clinicaRepository.findByNomeStartingWith(nome);
     }
 
     @Override

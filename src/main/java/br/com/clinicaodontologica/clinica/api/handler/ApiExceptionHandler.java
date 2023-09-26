@@ -2,6 +2,7 @@ package br.com.clinicaodontologica.clinica.api.handler;
 
 import br.com.clinicaodontologica.clinica.domain.exception.ClinicaNotFoundException;
 import br.com.clinicaodontologica.clinica.domain.exception.CnpjAlreadyExistsException;
+import br.com.clinicaodontologica.clinica.domain.exception.PacienteNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,5 +21,11 @@ public class ApiExceptionHandler {
     public ResponseEntity<?> clinicaNaoEncontrada
             (ClinicaNotFoundException clinicaNotFoundException){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(clinicaNotFoundException.getMessage());
+    }
+
+    @ExceptionHandler(PacienteNotFoundException.class)
+    public ResponseEntity<?> pacienteNaoEncontrado
+            (PacienteNotFoundException pacienteNotFoundException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pacienteNotFoundException.getMessage());
     }
 }
